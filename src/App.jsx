@@ -11,7 +11,7 @@ import {Icon} from 'leaflet';
 
 const fetchData = async () => {
   try {
-    const response = await fetch("/aggregates.json"); // Charger le fichier JSON
+    const response = await fetch("aggregates.json"); // Charger le fichier JSON
     if (!response.ok) throw new Error("Erreur de chargement du fichier JSON");
     return await response.json();
   } catch (error) {
