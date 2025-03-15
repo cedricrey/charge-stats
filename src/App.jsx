@@ -34,7 +34,7 @@ const selectChargerIcon = new Icon ({
 });
 
 const daysOfWeek = [
-  "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"
+  "dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"
 ];
 
 const CustomTooltip = ({ active, payload, label }) => {
@@ -136,9 +136,32 @@ export default function PDCDashboard() {
   }
 
   const RADIAN = Math.PI / 180;
-  let repartition_status_par_jourArray;
+  let repartition_status_par_jourArray, allWeeksHours;
   if(selectedStation && typeof selectedDay != "undefined" && selectedStation.repartition_status_par_jour[selectedDay])
     repartition_status_par_jourArray = Object.entries(selectedStation.repartition_status_par_jour[selectedDay]).map(v => ({name:v[0].toString(),value:parseInt(v[1])}));
+  /* Tri des heures de la semaine complète */
+  if(selectedStation)
+  {
+    allWeeksHours = [];
+    // console.log("selectedStation.taux_occupation_par_heure_jour is ",  selectedStation.taux_occupation_par_heure_jour)
+    Object.entries(selectedStation.taux_occupation_par_heure_jour).forEach(
+      (values, index) => {
+        let day = daysOfWeek[index];
+        //console.log("values" , values)
+        Object.entries(values[1]).map( (v, indexHour ) => {
+          //console.log("v" , v)
+          allWeeksHours.push({
+            label : day + " à " + indexHour + "h",
+            value : v[1]
+          });
+        })
+      }
+    );
+    allWeeksHours.sort( (a,b) =>{
+      return a.value - b.value;
+    } );
+    //console.log("allWeeksHours sorted ? ", allWeeksHours);
+  }
   const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -177,7 +200,7 @@ export default function PDCDashboard() {
           </div>
       </div>
         <MapContainer center={[48.8566, 2.3522]} zoom={12} className="h-full w-full rounded-lg shadow-lg" ref={setMap}>
-          <TileLayer url="https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/256/{z}/{x}/{y}@2x?access_token=sk.eyJ1Ijoic2FyYWhvcmJhbiIsImEiOiJjbHR3dXo0bGkwNDJ0MmtvZHo3M3llcWRuIn0.wYPyJx-3NpAWAO7msr2oEA"/>
+          <TileLayer url="https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png"/>
 
           <MarkerClusterGroup showCoverageOnHover={false}>
           {stations.map((station) => (
@@ -189,7 +212,7 @@ export default function PDCDashboard() {
                 click: () => {
                   setSelectedStation(station);
                   map.setView([station.coordonnee.lat, station.coordonnee.lon], map.getZoom(), {
-                    animate: true,
+                    animate: false,
                   })
                   
                 },
@@ -283,7 +306,7 @@ export default function PDCDashboard() {
                       <Tooltip content={<CustomTooltip/>}/>
                       <Bar dataKey="rate" fill="#88d4d8">{Object.entries(selectedStation.taux_occupation_par_heure_jour[selectedDay] || {}).map(([hour, rate]) => (<Cell fill={getBarColor(rate)}/>))}</Bar>
                   </BarChart>
-  
+{/*   
                     <h3 className="text-md font-semibold mt-4">Répartition du taux d'occupation le {daysOfWeek[selectedDay]}</h3>
                     <PieChart width={400} height={400}>
                     <Pie
@@ -301,8 +324,21 @@ export default function PDCDashboard() {
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
-                    </PieChart>
-  
+                    </PieChart> */}
+        
+        <h3 className="text-md font-semibold mt-4 bg-green-50 text-green-800 ring-1 ring-green-600/20">Heures les moins occupées de la semaine :</h3>            
+        <ol className="divide-y divide-gray-100">
+        {[...allWeeksHours].splice(0,10).map( d => { 
+          return (<li><span className="label">{d.label} :</span> <span className="rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-800 ring-1 ring-green-600/20 ring-inset">{d.value}%</span></li>)
+        })}
+        </ol>
+
+        <h3 className="text-md font-semibold mt-4 bg-red-50 text-red-800 ring-1 ring-red-600/20">Heures les plus occupées de la semaine :</h3>            
+        <ol className="divide-y divide-gray-100">
+        {[...allWeeksHours].splice(-10).map( d => { 
+          return (<li><span className="label">{d.label} :</span> <span className="rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-800 ring-1 ring-red-600/20 ring-inset">{d.value}%</span></li>)
+        })}
+        </ol>
                   </ResponsiveContainer>
                 ) : (
                   <p className="text-gray-500">Données non disponibles pour ce jour.</p>

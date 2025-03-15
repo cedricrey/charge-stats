@@ -85,6 +85,12 @@ body input {
     color: rgb(172, 4, 4);
 }
 
+li .label {
+    display: inline-block;
+    width: 50%;
+    text-align: right;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
