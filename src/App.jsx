@@ -200,8 +200,7 @@ export default function PDCDashboard() {
           </div>
       </div>
         <MapContainer center={[48.8566, 2.3522]} zoom={12} className="h-full w-full rounded-lg shadow-lg" ref={setMap}>
-          <TileLayer url="https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png"/>
-
+        <TileLayer url="https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/256/{z}/{x}/{y}@2x?access_token=sk.eyJ1Ijoic2FyYWhvcmJhbiIsImEiOiJjbHR3dXo0bGkwNDJ0MmtvZHo3M3llcWRuIn0.wYPyJx-3NpAWAO7msr2oEA"/>
           <MarkerClusterGroup showCoverageOnHover={false}>
           {stations.map((station) => (
             <Marker
