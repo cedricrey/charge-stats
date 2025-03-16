@@ -1,13 +1,13 @@
-import { useState, useEffect, useRef } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvent } from "react-leaflet";
+import { useState, useEffect } from "react";
+import { MapContainer,  Marker, Popup, useMap, useMapEvent } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import 'react-leaflet-markercluster/styles';
 import "leaflet-geosearch/assets/css/leaflet.css";
-import { PieChart, Pie, Sector, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import MarkerClusterGroup from "react-leaflet-markercluster";
-import { GeoSearchControl, OpenStreetMapProvider, MapBoxProvider } from 'leaflet-geosearch';
+import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import {Icon} from 'leaflet';
-
+import {MapLibreTileLayer} from './MapLibreTileLayer';
 
 const fetchData = async () => {
   try {
@@ -199,8 +199,11 @@ export default function PDCDashboard() {
               <h2 class="text-sg font-bold tracking-tight text-gray-900  text-gray ">Statistiques d'occupation des stations de recharge</h2>
           </div>
       </div>
-        <MapContainer center={[48.8566, 2.3522]} zoom={12} className="h-full w-full rounded-lg shadow-lg" ref={setMap}>
-        <TileLayer url="https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/256/{z}/{x}/{y}@2x?access_token=sk.eyJ1Ijoic2FyYWhvcmJhbiIsImEiOiJjbHR3dXo0bGkwNDJ0MmtvZHo3M3llcWRuIn0.wYPyJx-3NpAWAO7msr2oEA"/>
+        <MapContainer center={[48.8566, 2.3522]} zoom={12} maxZoom={17} className="h-full w-full rounded-lg shadow-lg" ref={setMap}>
+        <MapLibreTileLayer
+              attribution='&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
+              url="https://tiles.stadiamaps.com/styles/osm_bright.json"
+            />
           <MarkerClusterGroup showCoverageOnHover={false}>
           {stations.map((station) => (
             <Marker
