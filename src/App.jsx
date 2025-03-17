@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { MapContainer,  Marker, Popup, useMap, useMapEvent } from "react-leaflet";
+import { MapContainer,  Marker, Popup, AttributionControl, useMap, useMapEvent } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import 'react-leaflet-markercluster/styles';
 import "leaflet-geosearch/assets/css/leaflet.css";
@@ -199,11 +199,12 @@ export default function PDCDashboard() {
               <h2 class="text-sg font-bold tracking-tight text-gray-900  text-gray ">Statistiques d'occupation des stations de recharge</h2>
           </div>
       </div>
-        <MapContainer center={[48.8566, 2.3522]} zoom={12} maxZoom={17} className="h-full w-full rounded-lg shadow-lg" ref={setMap}>
-        <MapLibreTileLayer
+        <MapContainer center={[48.8566, 2.3522]} zoom={12} maxZoom={17} className="h-full w-full rounded-lg shadow-lg" ref={setMap} attributionControl={false}>
+        <MapLibreTileLayer 
               attribution='&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
               url="https://tiles.stadiamaps.com/styles/osm_bright.json"
             />
+            <AttributionControl position="bottomleft" />
           <MarkerClusterGroup showCoverageOnHover={false}>
           {stations.map((station) => (
             <Marker
