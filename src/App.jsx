@@ -162,26 +162,26 @@ export default function PDCDashboard() {
     } );
     //console.log("allWeeksHours sorted ? ", allWeeksHours);
   }
-  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-    //console.log("index ? ", index, repartition_status_par_jourArray);
-    const val = repartition_status_par_jourArray[index].name;
-    //const val = index;
-    //console.log("index ? ", index , "val ?" , val);
-    const label = statusLabel[ val ] ? statusLabel[ val ] : "Incconu";
-    return (
-      <>
-      <text x={x} y={y} fill="black" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-        {`${label}`}
-      </text>
-      <text x={x} y={y + 20} fill={COLORS_DARKER[index % COLORS_DARKER.length]} textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-        {`${(percent * 100).toFixed(0)}%`}
-      </text>
-      </>
-    );
-  };
+  // const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+  //   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  //   const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  //   const y = cy + radius * Math.sin(-midAngle * RADIAN);
+  //   //console.log("index ? ", index, repartition_status_par_jourArray);
+  //   const val = repartition_status_par_jourArray[index].name;
+  //   //const val = index;
+  //   //console.log("index ? ", index , "val ?" , val);
+  //   const label = statusLabel[ val ] ? statusLabel[ val ] : "Incconu";
+  //   return (
+  //     <>
+  //     <text x={x} y={y} fill="black" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+  //       {`${label}`}
+  //     </text>
+  //     <text x={x} y={y + 20} fill={COLORS_DARKER[index % COLORS_DARKER.length]} textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+  //       {`${(percent * 100).toFixed(0)}%`}
+  //     </text>
+  //     </>
+  //   );
+  // };
   useEffect(() => {
     fetchData().then((data) => setStations(Object.values(data)));
   }, []);
@@ -196,7 +196,7 @@ export default function PDCDashboard() {
 
       <div className={`fixed top-3 left-20 z-600 w-1/3 h-fit bg-white shadow-md rounded-lg overflow-y-auto text-black hidden sm:block`}>      
           <div className="bg-white-800 rounded-lg rounded-b-none p-4">
-              <h2 class="text-sg font-bold tracking-tight text-gray-900  text-gray ">Statistiques d'occupation des stations de recharge</h2>
+              <h2 className="text-sg font-bold tracking-tight text-gray-900  text-gray ">Statistiques d&apos;occupation des stations de recharge</h2>
           </div>
       </div>
         <MapContainer center={[48.8566, 2.3522]} zoom={12} maxZoom={17} className="h-full w-full rounded-lg shadow-lg" ref={setMap} attributionControl={false}>
